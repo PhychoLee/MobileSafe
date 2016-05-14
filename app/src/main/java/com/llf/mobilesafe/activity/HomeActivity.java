@@ -24,198 +24,203 @@ import android.widget.Toast;
 
 public class HomeActivity extends Activity {
 
-	private GridView gv_home;
+    private GridView gv_home;
 
-	private String[] mItems = new String[] { "手机防盗", "通信卫士", "软件管理", "进程管理",
-			"流量管理", "手机杀毒", "缓存管理", "高级工具", "设置中心" };
+    private String[] mItems = new String[]{"手机防盗", "通信卫士", "软件管理", "进程管理",
+            "流量管理", "手机杀毒", "缓存管理", "高级工具", "设置中心"};
 
-	private int[] mPics = { R.drawable.home_safe, R.drawable.home_callmsgsafe,
-			R.drawable.home_apps, R.drawable.home_taskmanager,
-			R.drawable.home_netmanager, R.drawable.home_trojan,
-			R.drawable.home_sysoptimize, R.drawable.home_tools,
-			R.drawable.home_settings };
+    private int[] mPics = {R.drawable.home_safe, R.drawable.home_callmsgsafe,
+            R.drawable.home_apps, R.drawable.home_taskmanager,
+            R.drawable.home_netmanager, R.drawable.home_trojan,
+            R.drawable.home_sysoptimize, R.drawable.home_tools,
+            R.drawable.home_settings};
 
-	private SharedPreferences mpref;
+    private SharedPreferences mpref;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_home);
-		
-		mpref = getSharedPreferences("config", MODE_PRIVATE);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
 
-		gv_home = (GridView) findViewById(R.id.gv_home);
-		gv_home.setAdapter(new HomeAdapter());
-		gv_home.setOnItemClickListener(new OnItemClickListener() {
+        mpref = getSharedPreferences("config", MODE_PRIVATE);
 
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				switch (position) {
-				case 0:
-					//手机防盗，首先弹出密码对话框
-					showPasswordDialog();
-					break;
-				case 7:
-					//高级工具
-					startActivity(new Intent(HomeActivity.this,
-							AToolsActivity.class));
-					break;
-				case 8:
-					//设置中心
-					startActivity(new Intent(HomeActivity.this,
-							SettingActivity.class));
-					break;
-				}
-			}
-		});
-	}
+        gv_home = (GridView) findViewById(R.id.gv_home);
+        gv_home.setAdapter(new HomeAdapter());
+        gv_home.setOnItemClickListener(new OnItemClickListener() {
 
-	/**
-	 * 弹出设置密码或输入密码对话框
-	 */
-	protected void showPasswordDialog() {
-		// 判断是否设置过密码
-		String savedPassword = mpref.getString("password", null);
-		if (!TextUtils.isEmpty(savedPassword)) {
-			//输入密码
-			showInputPasswordDialog();
-		}else {
-			// 设置密码
-			showSetPasswordDialog();
-		}
-	}
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                switch (position) {
+                    case 0:
+                        //手机防盗，首先弹出密码对话框
+                        showPasswordDialog();
+                        break;
+                    case 1:
+                        //手机黑名单
+                        startActivity(new Intent(HomeActivity.this,
+                               CallSafeActivity.class));
+                        break;
+                    case 7:
+                        //高级工具
+                        startActivity(new Intent(HomeActivity.this,
+                                AToolsActivity.class));
+                        break;
+                    case 8:
+                        //设置中心
+                        startActivity(new Intent(HomeActivity.this,
+                                SettingActivity.class));
+                        break;
+                }
+            }
+        });
+    }
 
-	/**
-	 * 输入密码对话框
-	 */
-	private void showInputPasswordDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		final AlertDialog dialog = builder.create();
-		View view = View.inflate(this, R.layout.dialog_input_password, null);
-		dialog.setView(view, 0, 0, 0, 0);// 将自定义布局设置给dialog
-		
-		final EditText et_password = (EditText) view.findViewById(R.id.et_password);
-		
-		Button bt_comfirm = (Button) view.findViewById(R.id.bt_comfirm);
-		Button bt_cancel = (Button) view.findViewById(R.id.bt_cancel);
-		//确定按键监听
-		bt_comfirm.setOnClickListener(new OnClickListener() {
+    /**
+     * 弹出设置密码或输入密码对话框
+     */
+    protected void showPasswordDialog() {
+        // 判断是否设置过密码
+        String savedPassword = mpref.getString("password", null);
+        if (!TextUtils.isEmpty(savedPassword)) {
+            //输入密码
+            showInputPasswordDialog();
+        } else {
+            // 设置密码
+            showSetPasswordDialog();
+        }
+    }
 
-			@Override
-			public void onClick(View v) {
-				//校验两次密码
-				String password = et_password.getText().toString();
-				
-				if (!TextUtils.isEmpty(password)) {
-					String savedPassword = mpref.getString("password", null);
-					if (MD5Utils.MD5Digest(password).equals(savedPassword)) {
-						dialog.dismiss();
-						startActivity(new Intent(HomeActivity.this, LostFindActivity.class));
+    /**
+     * 输入密码对话框
+     */
+    private void showInputPasswordDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog dialog = builder.create();
+        View view = View.inflate(this, R.layout.dialog_input_password, null);
+        dialog.setView(view, 0, 0, 0, 0);// 将自定义布局设置给dialog
+
+        final EditText et_password = (EditText) view.findViewById(R.id.et_password);
+
+        Button bt_comfirm = (Button) view.findViewById(R.id.bt_comfirm);
+        Button bt_cancel = (Button) view.findViewById(R.id.bt_cancel);
+        //确定按键监听
+        bt_comfirm.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //校验两次密码
+                String password = et_password.getText().toString();
+
+                if (!TextUtils.isEmpty(password)) {
+                    String savedPassword = mpref.getString("password", null);
+                    if (MD5Utils.MD5Digest(password).equals(savedPassword)) {
+                        dialog.dismiss();
+                        startActivity(new Intent(HomeActivity.this, LostFindActivity.class));
 //						Toast.makeText(HomeActivity.this, "登录成功！", Toast.LENGTH_SHORT).show();
-					}else {
-						Toast.makeText(HomeActivity.this, "密码错误！", Toast.LENGTH_SHORT).show();
-					}
-				}else {
-					Toast.makeText(HomeActivity.this, "密码不能为空！", Toast.LENGTH_SHORT).show();
-				}
-			}
-		});
-		//取消按键监听
-		bt_cancel.setOnClickListener(new OnClickListener() {
+                    } else {
+                        Toast.makeText(HomeActivity.this, "密码错误！", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(HomeActivity.this, "密码不能为空！", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        //取消按键监听
+        bt_cancel.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				dialog.dismiss();
-			}
-		});
-		
-		dialog.show();
-	}
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
 
-	/**
-	 * 弹出设置密码对话框
-	 */
-	private void showSetPasswordDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		final AlertDialog dialog = builder.create();
-		View view = View.inflate(this, R.layout.dialog_set_password, null);
-		dialog.setView(view, 0, 0, 0, 0);// 将自定义布局设置给dialog
+        dialog.show();
+    }
 
-		final EditText et_password = (EditText) view.findViewById(R.id.et_password);
-		final EditText et_password_comfirm = (EditText) view.findViewById(R.id.et_password_comfirm);
-		
-		Button bt_comfirm = (Button) view.findViewById(R.id.bt_comfirm);
-		Button bt_cancel = (Button) view.findViewById(R.id.bt_cancel);
-		//确定按键监听
-		bt_comfirm.setOnClickListener(new OnClickListener() {
+    /**
+     * 弹出设置密码对话框
+     */
+    private void showSetPasswordDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog dialog = builder.create();
+        View view = View.inflate(this, R.layout.dialog_set_password, null);
+        dialog.setView(view, 0, 0, 0, 0);// 将自定义布局设置给dialog
 
-			@Override
-			public void onClick(View v) {
-				//校验两次密码
-				String password = et_password.getText().toString();
-				String passwordComfirm = et_password_comfirm.getText().toString();
-				
-				if (!TextUtils.isEmpty(password) && !TextUtils.isEmpty(passwordComfirm)) {
-					if (password.equals(passwordComfirm)) {
-						mpref.edit().putString("password", MD5Utils.MD5Digest(password)).commit();
-						dialog.dismiss();
-						startActivity(new Intent(HomeActivity.this, LostFindActivity.class));
+        final EditText et_password = (EditText) view.findViewById(R.id.et_password);
+        final EditText et_password_comfirm = (EditText) view.findViewById(R.id.et_password_comfirm);
+
+        Button bt_comfirm = (Button) view.findViewById(R.id.bt_comfirm);
+        Button bt_cancel = (Button) view.findViewById(R.id.bt_cancel);
+        //确定按键监听
+        bt_comfirm.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //校验两次密码
+                String password = et_password.getText().toString();
+                String passwordComfirm = et_password_comfirm.getText().toString();
+
+                if (!TextUtils.isEmpty(password) && !TextUtils.isEmpty(passwordComfirm)) {
+                    if (password.equals(passwordComfirm)) {
+                        mpref.edit().putString("password", MD5Utils.MD5Digest(password)).commit();
+                        dialog.dismiss();
+                        startActivity(new Intent(HomeActivity.this, LostFindActivity.class));
 //						Toast.makeText(HomeActivity.this, "设置成功！", Toast.LENGTH_SHORT).show();
-					}else {
-						Toast.makeText(HomeActivity.this, "密码不一致！", Toast.LENGTH_SHORT).show();
-					}
-				}else {
-					Toast.makeText(HomeActivity.this, "输入框内容不能为空！", Toast.LENGTH_SHORT).show();
-				}
-			}
-		});
-		//取消按键监听
-		bt_cancel.setOnClickListener(new OnClickListener() {
+                    } else {
+                        Toast.makeText(HomeActivity.this, "密码不一致！", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(HomeActivity.this, "输入框内容不能为空！", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        //取消按键监听
+        bt_cancel.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				dialog.dismiss();
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
 
-		dialog.show();
+        dialog.show();
 
-	}
+    }
 
-	//主界面功能列表适配器
-	class HomeAdapter extends BaseAdapter {
+    //主界面功能列表适配器
+    class HomeAdapter extends BaseAdapter {
 
-		@Override
-		public int getCount() {
-			return mItems.length;
-		}
+        @Override
+        public int getCount() {
+            return mItems.length;
+        }
 
-		@Override
-		public Object getItem(int position) {
-			return mItems[position];
-		}
+        @Override
+        public Object getItem(int position) {
+            return mItems[position];
+        }
 
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
 
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			View view = View.inflate(HomeActivity.this,
-					R.layout.home_list_item, null);
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view = View.inflate(HomeActivity.this,
+                    R.layout.home_list_item, null);
 
-			ImageView iv_home_item = (ImageView) view
-					.findViewById(R.id.iv_home_item);
-			TextView tv_home_item = (TextView) view
-					.findViewById(R.id.tv_home_item);
+            ImageView iv_home_item = (ImageView) view
+                    .findViewById(R.id.iv_home_item);
+            TextView tv_home_item = (TextView) view
+                    .findViewById(R.id.tv_home_item);
 
-			iv_home_item.setImageResource(mPics[position]);
-			tv_home_item.setText(mItems[position]);
+            iv_home_item.setImageResource(mPics[position]);
+            tv_home_item.setText(mItems[position]);
 
-			return view;
-		}
+            return view;
+        }
 
-	}
+    }
 }
