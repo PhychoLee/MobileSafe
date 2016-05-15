@@ -36,4 +36,12 @@
         android:layout_height="wrap_content"
         />
 
+    <com.llf.mobilesafe.view.SettingItemView
+        android:id="@+id/siv_black_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        check:desc_off="黑名单拦截已经关闭"
+        check:desc_on="黑名单拦截已经开启"
+        check:sivtitle="黑名单拦截设置" />
+
 </LinearLayout>

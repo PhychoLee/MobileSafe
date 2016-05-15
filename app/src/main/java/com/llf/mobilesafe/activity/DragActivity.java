@@ -24,7 +24,7 @@ public class DragActivity extends Activity {
 	private int startX;
 	private int startY;
 	private SharedPreferences mPref;
-	long[] mHits = new long[3];// 表示双击事件
+	long[] mHits = new long[2];// 表示双击事件
 	private LinearLayout ivDrag;
 
 	@Override
@@ -76,11 +76,15 @@ public class DragActivity extends Activity {
 			public void onClick(View v) {
 				System.arraycopy(mHits, 1, mHits, 0, mHits.length - 1);
 				mHits[mHits.length - 1] = SystemClock.uptimeMillis();// 开机时间
-				if (mHits[0] >= (SystemClock.uptimeMillis() - 500)) {// 500毫秒内完成3次点击
+				if (mHits[0] >= (SystemClock.uptimeMillis() - 500)) {// 500毫秒内完成2次点击
 					// 将ivDrag居中
 					ivDrag.layout(width / 2 - ivDrag.getWidth() / 2,
 							ivDrag.getTop(), width / 2 + ivDrag.getWidth() / 2,
 							ivDrag.getBottom());
+					//将居中位置存入mPref
+					Editor edit = mPref.edit();
+					edit.putInt("lastX", ivDrag.getLeft()).commit();
+					edit.putInt("lastY", ivDrag.getTop()).commit();
 				}
 			}
 		});

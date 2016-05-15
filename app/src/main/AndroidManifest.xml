@@ -38,16 +38,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.HomeActivity"></activity>
-        <activity android:name=".activity.SettingActivity"></activity>
-        <activity android:name=".activity.LostFindActivity"></activity>
-        <activity android:name=".activity.Setup1Activity"></activity>
-        <activity android:name=".activity.Setup2Activity"></activity>
-        <activity android:name=".activity.Setup3Activity"></activity>
-        <activity android:name=".activity.Setup4Activity"></activity>
-        <activity android:name=".activity.ContactActivity"></activity>
-        <activity android:name=".activity.AToolsActivity"></activity>
-        <activity android:name=".activity.AddressActivity"></activity>
+        <activity android:name=".activity.HomeActivity" />
+        <activity android:name=".activity.SettingActivity" />
+        <activity android:name=".activity.LostFindActivity" />
+        <activity android:name=".activity.Setup1Activity" />
+        <activity android:name=".activity.Setup2Activity" />
+        <activity android:name=".activity.Setup3Activity" />
+        <activity android:name=".activity.Setup4Activity" />
+        <activity android:name=".activity.ContactActivity" />
+        <activity android:name=".activity.AToolsActivity" />
+        <activity android:name=".activity.AddressActivity" />
         <activity
             android:name=".activity.DragActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
@@ -58,7 +58,7 @@
             </intent-filter>
         </receiver>
         <receiver android:name=".receiver.SMSReceiver">
-            <intent-filter android:priority="20000">
+            <intent-filter android:priority="200000">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
@@ -76,10 +76,17 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".service.LocationService"></service>
-        <service android:name=".service.AddressService"></service>
+        <service android:name=".service.LocationService" />
+        <service android:name=".service.AddressService" />
 
-        <activity android:name=".activity.CallSafeActivity"></activity>
+        <activity android:name=".activity.CallSafeActivity" />
+
+        <service
+            android:name=".service.BlackNumberService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".activity.AppManagerActivity"></activity>
     </application>
 
 </manifest>

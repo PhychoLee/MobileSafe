@@ -3,10 +3,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <TextView
-        style="@style/TitleBar"
-        android:text="黑名单管理"
-        />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            style="@style/TitleBar"
+            android:text="黑名单管理"
+            />
+
+        <Button
+            android:onClick="addBlackNumber"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:text="添加"
+            android:layout_alignParentRight="true"
+            android:background="#6aa0f7"
+            />
+
+    </RelativeLayout>
+
 
     <FrameLayout
         android:layout_width="match_parent"

@@ -61,6 +61,11 @@ public class HomeActivity extends Activity {
                         startActivity(new Intent(HomeActivity.this,
                                CallSafeActivity.class));
                         break;
+                    case 2:
+                        //软件管理
+                        startActivity(new Intent(HomeActivity.this,
+                               AppManagerActivity.class));
+                        break;
                     case 7:
                         //高级工具
                         startActivity(new Intent(HomeActivity.this,
@@ -102,10 +107,10 @@ public class HomeActivity extends Activity {
 
         final EditText et_password = (EditText) view.findViewById(R.id.et_password);
 
-        Button bt_comfirm = (Button) view.findViewById(R.id.bt_comfirm);
+        Button bt_confirm = (Button) view.findViewById(R.id.bt_confirm);
         Button bt_cancel = (Button) view.findViewById(R.id.bt_cancel);
         //确定按键监听
-        bt_comfirm.setOnClickListener(new OnClickListener() {
+        bt_confirm.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -148,21 +153,21 @@ public class HomeActivity extends Activity {
         dialog.setView(view, 0, 0, 0, 0);// 将自定义布局设置给dialog
 
         final EditText et_password = (EditText) view.findViewById(R.id.et_password);
-        final EditText et_password_comfirm = (EditText) view.findViewById(R.id.et_password_comfirm);
+        final EditText et_password_confirm = (EditText) view.findViewById(R.id.et_password_confirm);
 
-        Button bt_comfirm = (Button) view.findViewById(R.id.bt_comfirm);
+        Button bt_confirm = (Button) view.findViewById(R.id.bt_confirm);
         Button bt_cancel = (Button) view.findViewById(R.id.bt_cancel);
         //确定按键监听
-        bt_comfirm.setOnClickListener(new OnClickListener() {
+        bt_confirm.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 //校验两次密码
                 String password = et_password.getText().toString();
-                String passwordComfirm = et_password_comfirm.getText().toString();
+                String passwordConfirm = et_password_confirm.getText().toString();
 
-                if (!TextUtils.isEmpty(password) && !TextUtils.isEmpty(passwordComfirm)) {
-                    if (password.equals(passwordComfirm)) {
+                if (!TextUtils.isEmpty(password) && !TextUtils.isEmpty(passwordConfirm)) {
+                    if (password.equals(passwordConfirm)) {
                         mpref.edit().putString("password", MD5Utils.MD5Digest(password)).commit();
                         dialog.dismiss();
                         startActivity(new Intent(HomeActivity.this, LostFindActivity.class));

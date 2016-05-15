@@ -83,7 +83,7 @@ public class BlackNumberDao {
      */
     public String find(String number) {
         String mode = "";
-        SQLiteDatabase db = helper.getWritableDatabase();
+        SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = db.query("blacknumber", new String[]{"mode"}, "number=?", new String[]{number}, null, null, null);
         if (cursor.moveToNext()) {
             mode = cursor.getString(0);
@@ -100,7 +100,7 @@ public class BlackNumberDao {
      */
     public List<BlackNumberInfo> findAll() {
         List<BlackNumberInfo> blackNumberList = new ArrayList<>();
-        SQLiteDatabase db = helper.getWritableDatabase();
+        SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = db.query("blacknumber", new String[]{"number", "mode"}, null, null, null, null, null);
         while (cursor.moveToNext()) {
             BlackNumberInfo blackNumberInfo = new BlackNumberInfo();
@@ -127,7 +127,7 @@ public class BlackNumberDao {
      */
     public List<BlackNumberInfo> findByPage(int size, int page) {
         List<BlackNumberInfo> blackNumberList = new ArrayList<>();
-        SQLiteDatabase db = helper.getWritableDatabase();
+        SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = db.rawQuery("select number,mode from blacknumber limit ? offset ?", new String[]{String.valueOf(size),
                 String.valueOf((page-1) * size)});
         while (cursor.moveToNext()){
@@ -141,5 +141,19 @@ public class BlackNumberDao {
         cursor.close();
         db.close();
         return blackNumberList;
+    }
+
+    /**
+     * 获得数据总数
+     * @return
+     */
+    public int getTotalSize(){
+        int total = 0;
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select count(*) from blacknumber", null);
+        if (cursor.moveToNext()){
+            total = cursor.getInt(0);
+        }
+        return total;
     }
 }

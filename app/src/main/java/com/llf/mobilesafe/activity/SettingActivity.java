@@ -2,6 +2,7 @@ package com.llf.mobilesafe.activity;
 
 import com.llf.mobilesafe.R;
 import com.llf.mobilesafe.service.AddressService;
+import com.llf.mobilesafe.service.BlackNumberService;
 import com.llf.mobilesafe.utils.ServiceStateUtils;
 import com.llf.mobilesafe.view.SettingClickView;
 import com.llf.mobilesafe.view.SettingItemView;
@@ -23,6 +24,7 @@ public class SettingActivity extends Activity {
 	private String[] items = new String[]{"半透明","活力橙","卫士蓝","金属灰","苹果绿"};
 	private SettingClickView scvAddressStyle;
 	private SettingClickView scvAddressLocation;;
+	private SettingItemView siv_black_number;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,7 @@ public class SettingActivity extends Activity {
 		initAddress();
 		initAddressStyle();
 		initAddressLocation();
+		initBlackNumber();
 	}
 
 	/**
@@ -149,7 +152,10 @@ public class SettingActivity extends Activity {
 		builder.setNegativeButton("取消", null);
 		builder.show();
 	}
-	
+
+	/**
+	 * 归属地显示位置
+	 */
 	private void initAddressLocation(){
 		scvAddressLocation = (SettingClickView) findViewById(R.id.scv_address_location);
 		scvAddressLocation.setTitle("归属地悬浮框显示位置");
@@ -162,6 +168,38 @@ public class SettingActivity extends Activity {
 				startActivity(new Intent(SettingActivity.this, DragActivity.class));
 			}
 			
+		});
+	}
+
+
+	/**
+	 * 黑名单拦截设置
+	 */
+	private void initBlackNumber() {
+		siv_black_number = (SettingItemView) findViewById(R.id.siv_black_number);
+
+		boolean isServiceRunning = ServiceStateUtils.isServiceRunning(this,
+				"com.llf.mobilesafe.service.BlackNumberService");
+		if (isServiceRunning) {
+			siv_black_number.setChecked(true);
+		}else {
+			siv_black_number.setChecked(false);
+		}
+
+		siv_black_number.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (siv_black_number.isChecked()) {
+					siv_black_number.setChecked(false);
+					stopService(new Intent(SettingActivity.this,
+							BlackNumberService.class));
+				} else {
+					siv_black_number.setChecked(true);
+					startService(new Intent(SettingActivity.this,
+							BlackNumberService.class));
+				}
+			}
 		});
 	}
 }
