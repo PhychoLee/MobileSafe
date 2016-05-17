@@ -35,9 +35,22 @@
             />
     </LinearLayout>
 
-    <include
-        android:id="@+id/list_app"
-        layout="@layout/list_view"
-        ></include>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <include
+            android:id="@+id/list_app"
+            layout="@layout/list_view"
+            ></include>
+
+        <TextView
+            android:id="@+id/tv_appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#888888"
+            android:textColor="#fff"
+            android:text="用户程序"
+            />
+    </FrameLayout>
 
 </LinearLayout>
