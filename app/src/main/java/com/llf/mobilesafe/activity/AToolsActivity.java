@@ -1,6 +1,7 @@
 package com.llf.mobilesafe.activity;
 
 import com.llf.mobilesafe.R;
+import com.llf.mobilesafe.utils.SMSUtils;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -20,5 +21,13 @@ public class AToolsActivity extends Activity {
 	 */
 	public void numberAddressQuery(View v){
 		startActivity(new Intent(this, AddressActivity.class));
+	}
+
+	/**
+	 * 短信备份
+	 * @param v
+     */
+	public void smsBackup(View v){
+		SMSUtils.smsBackup(this);
 	}
 }
