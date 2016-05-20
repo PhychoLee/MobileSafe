@@ -69,7 +69,10 @@ public class SMSUtils {
                     serializer.endTag(null, "date");
 
                     serializer.startTag(null, "body");
-                    serializer.text(cursor.getString(cursor.getColumnIndex("body")));
+                    String body = cursor.getString(cursor.getColumnIndex("body"));
+                    //加密
+                    String encryptBody = CryptoUtils.encrypt("messageEncrypt", body);
+                    serializer.text(encryptBody);
                     serializer.endTag(null, "body");
 
                     serializer.endTag(null, "sms");

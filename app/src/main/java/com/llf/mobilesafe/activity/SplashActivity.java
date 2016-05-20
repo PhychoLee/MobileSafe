@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
@@ -21,6 +22,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -90,6 +92,25 @@ public class SplashActivity extends Activity {
         tv_version.setText("版本名:"+getVersionName());
         
         tv_download = (TextView) findViewById(R.id.tv_download);
+
+//		//生成快捷图标
+//		Intent shortcutIntent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+//		//不重复生成快捷图标
+//		shortcutIntent.putExtra("duplicate", false);
+//		//名字
+//		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME,"手机卫士");
+//		//图标
+//		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
+//		//意图
+//		//注意: ComponentName的第二个参数必须加上点号(.)，否则快捷方式无法启动相应程序
+//		ComponentName comp = new ComponentName(this.getPackageName(), this.getPackageName() + "." +this.getLocalClassName());
+//		Intent intent = new Intent(Intent.ACTION_MAIN);
+//		intent.setComponent(comp);
+//		intent.addCategory(Intent.CATEGORY_LAUNCHER);
+////		intent.addCategory("android.intent.category.LAUNCHER");
+//		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
+//		sendBroadcast(shortcutIntent);
+
         
         //复制数据库到本地文件夹
         copyDB("address.db");
