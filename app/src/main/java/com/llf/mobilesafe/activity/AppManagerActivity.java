@@ -99,7 +99,6 @@ public class AppManagerActivity extends Activity implements View.OnClickListener
             }else {
                 int location = 2 + userAppInfos.size();
                 return position - location;
-
             }
         }
 
@@ -124,7 +123,7 @@ public class AppManagerActivity extends Activity implements View.OnClickListener
                 return tv_sys;
             }
 
-            //除去两个提示TextView
+            //跳过两个提示TextView
             AppInfo appInfo;
             if (position < userAppInfos.size() +1){
                 appInfo = userAppInfos.get(position - 1);
