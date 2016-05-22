@@ -6,6 +6,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.os.Debug;
 
 import com.llf.mobilesafe.R;
 import com.llf.mobilesafe.domain.TaskInfo;
@@ -40,19 +41,13 @@ public class TaskInfos {
                 //应用名
                 String appName = packageInfo.applicationInfo.loadLabel(packageManager).toString();
 
+                //内存占用
+                Debug.MemoryInfo[] processMemoryInfo = activityManager.getProcessMemoryInfo(new int[]{runningAppProcessInfo.pid});
+                long totalPrivateDirty = processMemoryInfo[0].getTotalPrivateDirty() *1024;
 
-//                if (icon == null) {
-//                    taskInfo.setIcon(context.getResources().getDrawable(
-//                            R.drawable.ic_launcher2));
-//                } else {
-                    taskInfo.setIcon(icon);
-//                }
-//
-//                if (appName == null) {
-//                    taskInfo.setAppName(processName);
-//                } else {
-                    taskInfo.setAppName(appName);
-//                }
+                taskInfo.setIcon(icon);
+                taskInfo.setAppName(appName);
+                taskInfo.setMemory(totalPrivateDirty);
 
                 //应用标记
                 int flags = packageInfo.applicationInfo.flags;

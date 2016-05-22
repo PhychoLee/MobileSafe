@@ -9,9 +9,10 @@ public class TaskInfo {
 
     private String packageName;
     private String appName;
-    private String memory;
+    private long memory;
     private Drawable icon;
     private boolean userApp;
+    private boolean checked;
 
     public String getPackageName() {
         return packageName;
@@ -29,11 +30,11 @@ public class TaskInfo {
         this.appName = appName;
     }
 
-    public String getMemory() {
+    public long getMemory() {
         return memory;
     }
 
-    public void setMemory(String memory) {
+    public void setMemory(long memory) {
         this.memory = memory;
     }
 
@@ -51,5 +52,13 @@ public class TaskInfo {
 
     public void setUserApp(boolean userApp) {
         this.userApp = userApp;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }
