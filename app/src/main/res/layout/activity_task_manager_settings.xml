@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:check="http://schemas.android.com/apk/res/com.llf.mobilesafe"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/TitleBar"
+        android:text="设置"
+        />
+
+    <com.llf.mobilesafe.view.SettingItemView
+        android:id="@+id/siv_sys_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        check:desc_off="系统应用已经隐藏"
+        check:desc_on="系统应用已经显示"
+        check:sivtitle="显示系统应用设置" />
+</LinearLayout>

@@ -1,12 +1,19 @@
 package com.llf.mobilesafe.activity;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.format.Formatter;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
@@ -29,11 +36,14 @@ public class TaskManagerActivity extends Activity {
     private TextView tv_task_count;
     private TextView tv_memory;
     private ListView list_task;
-    private List<TaskInfo> taskInfos;
     private List<TaskInfo> userTaskInfos;
     private List<TaskInfo> systemTaskInfos;
     private CheckBox cb_task_all;
     private TaskInfoAdapter taskInfoAdapter;
+    private int taskCount;
+    private long availMem;
+    private long totalMem;
+    private SharedPreferences mPrefs;
 
 
     @Override
@@ -41,15 +51,39 @@ public class TaskManagerActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_manager);
 
+        mPrefs = getSharedPreferences("config", MODE_PRIVATE);
+
+        //状态栏透明
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+//            Window window = getWindow();
+//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+//                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            window.setStatusBarColor(Color.TRANSPARENT);
+//            window.setNavigationBarColor(Color.TRANSPARENT);
+//        }
+
         initUI();
         initData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //刷新ListView
+        if (taskInfoAdapter != null){
+            taskInfoAdapter.notifyDataSetChanged();
+        }
     }
 
     private void initData() {
         new Thread() {
             @Override
             public void run() {
-                taskInfos = TaskInfos.getTaskInfos(TaskManagerActivity.this);
+                List<TaskInfo> taskInfos = TaskInfos.getTaskInfos(TaskManagerActivity.this);
                 userTaskInfos = new ArrayList<>();
                 systemTaskInfos = new ArrayList<>();
 
@@ -79,7 +113,12 @@ public class TaskManagerActivity extends Activity {
 
         @Override
         public int getCount() {
-            return taskInfos.size() + 2;
+            //判断是否显示系统应用
+            if (mPrefs.getBoolean("show_sys_task", false)){
+                return userTaskInfos.size() + systemTaskInfos.size() + 2;
+            }else{
+                return userTaskInfos.size() +1;
+            }
         }
 
         @Override
@@ -148,12 +187,20 @@ public class TaskManagerActivity extends Activity {
                 convertView.setTag(holder);
             }
 
+            //隐藏自身应用checkbox
+            if (taskInfo.getPackageName().equals(getPackageName())){
+                holder.cb_task.setVisibility(View.INVISIBLE);
+            }
 
             holder.iv_task_icon.setImageDrawable(taskInfo.getIcon());
             holder.tv_task_name.setText(taskInfo.getAppName());
-            holder.tv_task_mem.setText(Formatter.formatFileSize(TaskManagerActivity.this, taskInfo.getMemory()));
+            holder.tv_task_mem.setText("内存占用："+Formatter.formatFileSize(TaskManagerActivity.this, taskInfo.getMemory()));
             if (taskInfo.isChecked()) {
-                holder.cb_task.setChecked(true);
+                if (taskInfo.getPackageName().equals(getPackageName())){
+                    holder.cb_task.setChecked(false);
+                }else {
+                    holder.cb_task.setChecked(true);
+                }
             } else {
                 holder.cb_task.setChecked(false);
             }
@@ -176,13 +223,13 @@ public class TaskManagerActivity extends Activity {
         cb_task_all = (CheckBox) findViewById(R.id.cb_task_all);
 
         //进程数
-        int taskCount = ServiceStateUtils.getTaskCount(this);
-        tv_task_count.setText("运行中进程" + taskCount + "个");
+        taskCount = ServiceStateUtils.getTaskCount(this);
+        tv_task_count.setText("进程" + taskCount + "个");
 
         //剩余内存
-        long availMem = ServiceStateUtils.getAvailMen(this);
+        availMem = ServiceStateUtils.getAvailMen(this);
         //总内存
-        long totalMem = ServiceStateUtils.getTotalMen(this);
+        totalMem = ServiceStateUtils.getTotalMen(this);
         tv_memory.setText("剩余/总内存：" + Formatter.formatFileSize(this, availMem) + "/" + Formatter.formatFileSize(this, totalMem));
 
         //给ListView设置Item监听
@@ -214,9 +261,12 @@ public class TaskManagerActivity extends Activity {
      * @param view
      */
     public void checkAll(View view) {
-        System.out.println("CheckAll==============");
         if (cb_task_all.isChecked()) {
             for (TaskInfo taskInfo : userTaskInfos) {
+                //跳过自身应用
+                if (taskInfo.getPackageName().equals(getPackageName())){
+                    continue;
+                }
                 taskInfo.setChecked(true);
             }
             for (TaskInfo taskInfo : systemTaskInfos) {
@@ -233,5 +283,81 @@ public class TaskManagerActivity extends Activity {
 
         //刷新
         taskInfoAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 杀死进程
+     * @param view
+     */
+    public void killTask(View view){
+        //保存要杀死的进程类
+        List<TaskInfo> taskInfosToKill = new ArrayList<>();
+        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+
+        //用户进程
+        for (TaskInfo taskInfo: userTaskInfos) {
+            //如果判断为自身应用，跳过
+            if (taskInfo.getPackageName().equals(getPackageName())){
+                continue;
+            }
+            //进程被选中
+            if (taskInfo.isChecked()) {
+                //加进销毁集合中
+                taskInfosToKill.add(taskInfo);
+            }
+        }
+
+        //显示系统进程才清理
+        boolean show_sys_task = mPrefs.getBoolean("show_sys_task", false);
+        if (show_sys_task){
+            //系统进程
+            for (TaskInfo taskInfo: systemTaskInfos) {
+                //进程被选中
+                if (taskInfo.isChecked()) {
+                    //加进销毁集合中
+                    taskInfosToKill.add(taskInfo);
+                }
+            }
+        }
+
+        for (TaskInfo taskInfo: taskInfosToKill) {
+            //判断是否为用户进程
+            if (taskInfo.isUserApp()){
+                //杀死进程
+                activityManager.killBackgroundProcesses(taskInfo.getPackageName());
+                //移除进程
+                userTaskInfos.remove(taskInfo);
+
+                //应用数减1
+                taskCount--;
+                //可用内存数增加
+                availMem += taskInfo.getMemory();
+            }else {
+                //杀死进程
+                activityManager.killBackgroundProcesses(taskInfo.getPackageName());
+                //移除进程
+                systemTaskInfos.remove(taskInfo);
+
+                //应用数减1
+                taskCount--;
+                //可用内存数增加
+                availMem += taskInfo.getMemory();
+            }
+
+            //更新信息
+            tv_task_count.setText("进程" + taskCount + "个");
+            tv_memory.setText("剩余/总内存：" + Formatter.formatFileSize(this, availMem) + "/" + Formatter.formatFileSize(this, totalMem));
+
+            taskInfoAdapter.notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * 设置
+     * @param view
+     */
+    public void settings(View view){
+        //转跳到设置界面
+        startActivity(new Intent(this, TaskManagerSettingsActivity.class));
     }
 }
