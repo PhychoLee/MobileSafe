@@ -58,6 +58,9 @@
         <activity
             android:name=".activity.DragActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".activity.AppManagerActivity" />
+        <activity android:name=".activity.TaskManagerActivity" />
+        <activity android:name=".activity.TaskManagerSettingsActivity" />
 
         <receiver android:name=".receiver.BootCompleteReceiver">
             <intent-filter>
@@ -83,6 +86,17 @@
             </intent-filter>
         </receiver>
 
+        <!-- 桌面小部件的配置 -->
+        <receiver android:name=".receiver.TaskAppWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/task_appwidget_info" />
+        </receiver>
+
         <service android:name=".service.LocationService" />
         <service android:name=".service.AddressService" />
 
@@ -92,18 +106,10 @@
             android:name=".service.BlackNumberService"
             android:enabled="true"
             android:exported="true" />
-
-        <activity android:name=".activity.AppManagerActivity" />
-        <activity android:name=".activity.TaskManagerActivity" />
-        <!--
- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
-        -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
-        <activity android:name=".activity.TaskManagerSettingsActivity"></activity>
+        <service
+            android:name=".service.TaskWidgetService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

@@ -12,7 +12,7 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 
-public class ServiceStateUtils {
+public class SystemInfoUtils {
 
 	/**
 	 * 检测service是否运行工具

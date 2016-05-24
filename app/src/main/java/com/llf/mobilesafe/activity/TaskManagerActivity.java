@@ -2,18 +2,13 @@ package com.llf.mobilesafe.activity;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.format.Formatter;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
@@ -23,10 +18,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.llf.mobilesafe.R;
-import com.llf.mobilesafe.domain.AppInfo;
 import com.llf.mobilesafe.domain.TaskInfo;
 import com.llf.mobilesafe.engine.TaskInfos;
-import com.llf.mobilesafe.utils.ServiceStateUtils;
+import com.llf.mobilesafe.utils.SystemInfoUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +38,7 @@ public class TaskManagerActivity extends Activity {
     private long availMem;
     private long totalMem;
     private SharedPreferences mPrefs;
+    private List<TaskInfo> taskInfos;
 
 
     @Override
@@ -83,7 +78,7 @@ public class TaskManagerActivity extends Activity {
         new Thread() {
             @Override
             public void run() {
-                List<TaskInfo> taskInfos = TaskInfos.getTaskInfos(TaskManagerActivity.this);
+                taskInfos = TaskInfos.getTaskInfos(TaskManagerActivity.this);
                 userTaskInfos = new ArrayList<>();
                 systemTaskInfos = new ArrayList<>();
 
@@ -223,13 +218,13 @@ public class TaskManagerActivity extends Activity {
         cb_task_all = (CheckBox) findViewById(R.id.cb_task_all);
 
         //进程数
-        taskCount = ServiceStateUtils.getTaskCount(this);
+        taskCount = SystemInfoUtils.getTaskCount(this);
         tv_task_count.setText("进程" + taskCount + "个");
 
         //剩余内存
-        availMem = ServiceStateUtils.getAvailMen(this);
+        availMem = SystemInfoUtils.getAvailMen(this);
         //总内存
-        totalMem = ServiceStateUtils.getTotalMen(this);
+        totalMem = SystemInfoUtils.getTotalMen(this);
         tv_memory.setText("剩余/总内存：" + Formatter.formatFileSize(this, availMem) + "/" + Formatter.formatFileSize(this, totalMem));
 
         //给ListView设置Item监听

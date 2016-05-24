@@ -3,7 +3,7 @@ package com.llf.mobilesafe.activity;
 import com.llf.mobilesafe.R;
 import com.llf.mobilesafe.service.AddressService;
 import com.llf.mobilesafe.service.BlackNumberService;
-import com.llf.mobilesafe.utils.ServiceStateUtils;
+import com.llf.mobilesafe.utils.SystemInfoUtils;
 import com.llf.mobilesafe.view.SettingClickView;
 import com.llf.mobilesafe.view.SettingItemView;
 
@@ -86,7 +86,7 @@ public class SettingActivity extends Activity {
 	private void initAddress() {
 		sivAddress = (SettingItemView) findViewById(R.id.siv_address);
 
-		boolean isServiceRunning = ServiceStateUtils.isServiceRunning(this,
+		boolean isServiceRunning = SystemInfoUtils.isServiceRunning(this,
 				"com.llf.mobilesafe.service.AddressService");
 		if (isServiceRunning) {
 			sivAddress.setChecked(true);
@@ -178,7 +178,7 @@ public class SettingActivity extends Activity {
 	private void initBlackNumber() {
 		siv_black_number = (SettingItemView) findViewById(R.id.siv_black_number);
 
-		boolean isServiceRunning = ServiceStateUtils.isServiceRunning(this,
+		boolean isServiceRunning = SystemInfoUtils.isServiceRunning(this,
 				"com.llf.mobilesafe.service.BlackNumberService");
 		if (isServiceRunning) {
 			siv_black_number.setChecked(true);
