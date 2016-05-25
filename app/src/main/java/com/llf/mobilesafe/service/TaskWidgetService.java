@@ -1,5 +1,6 @@
 package com.llf.mobilesafe.service;
 
+import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -47,11 +48,17 @@ public class TaskWidgetService extends Service {
                 RemoteViews views = new RemoteViews(getPackageName(), R.layout.process_widget);
 
                 //应用进程数量
-                int taskCount = SystemInfoUtils.getTaskCount(TaskWidgetService.this);
+                int taskCount = SystemInfoUtils.getTaskCount(getApplicationContext());
                 views.setTextViewText(R.id.process_count, "正在运行软件："+String.valueOf(taskCount));
 
-                long availMen = SystemInfoUtils.getAvailMen(TaskWidgetService.this);
-                views.setTextViewText(R.id.process_memory, "剩余内存："+ Formatter.formatFileSize(TaskWidgetService.this, availMen));
+                long availMen = SystemInfoUtils.getAvailMen(getApplicationContext());
+                views.setTextViewText(R.id.process_memory, "剩余内存："+ Formatter.formatFileSize(getApplicationContext(), availMen));
+
+                //一健清理进程
+                Intent intent = new Intent();
+                intent.setAction("com.llf.mobilesafe.killProcess");
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+                views.setOnClickPendingIntent(R.id.btn_clear, pendingIntent);
 
                 //更新桌面
                 appWidgetManager.updateAppWidget(provider, views);

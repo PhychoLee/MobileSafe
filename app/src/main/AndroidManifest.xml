@@ -61,6 +61,7 @@
         <activity android:name=".activity.AppManagerActivity" />
         <activity android:name=".activity.TaskManagerActivity" />
         <activity android:name=".activity.TaskManagerSettingsActivity" />
+        <activity android:name=".activity.CallSafeActivity" />
 
         <receiver android:name=".receiver.BootCompleteReceiver">
             <intent-filter>
@@ -97,11 +98,15 @@
                 android:resource="@xml/task_appwidget_info" />
         </receiver>
 
+        <!-- 杀死进程 -->
+        <receiver android:name=".receiver.KillProcessReceiver">
+            <intent-filter>
+                <action android:name="com.llf.mobilesafe.killProcess" />
+            </intent-filter>
+        </receiver>
+
         <service android:name=".service.LocationService" />
         <service android:name=".service.AddressService" />
-
-        <activity android:name=".activity.CallSafeActivity" />
-
         <service
             android:name=".service.BlackNumberService"
             android:enabled="true"
@@ -109,7 +114,9 @@
         <service
             android:name=".service.TaskWidgetService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity android:name=".activity.AntivirusActivity"></activity>
     </application>
 
 </manifest>
