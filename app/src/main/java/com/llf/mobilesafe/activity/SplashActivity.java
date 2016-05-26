@@ -114,6 +114,7 @@ public class SplashActivity extends Activity {
         
         //复制数据库到本地文件夹
         copyDB("address.db");
+        copyDB("antivirus.db");
         
         SharedPreferences mpref = getSharedPreferences("config", MODE_PRIVATE);
         boolean auto_update = mpref.getBoolean("auto_update", true);

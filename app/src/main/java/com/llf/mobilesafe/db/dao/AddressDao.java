@@ -22,15 +22,6 @@ public class AddressDao {
 				address = cursor.getString(0);
 			}
 		
-		//正则匹配传入的手机号码,如果是手机号码，再去查询数据库
-//		if (number.matches("^1[3-8]\\d{9}$")) {
-//			Cursor cursor = database
-//					.rawQuery(
-//							"select location from data2 where id = (select outkey from data1 where id = ?)",
-//							new String[] { number.substring(0, 7) });
-//			if (cursor.moveToNext()) {
-//				address = cursor.getString(0);
-//			}
 			cursor.close();
 		}else if (number.matches("^\\d+$")) {
 			switch (number.length()) {
