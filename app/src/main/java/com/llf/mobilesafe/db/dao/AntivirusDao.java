@@ -1,5 +1,6 @@
 package com.llf.mobilesafe.db.dao;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -19,5 +20,15 @@ public class AntivirusDao {
             desc = cursor.getString(0);
         }
         return  desc;
+    }
+
+    public static void updateVirus(String md5, String desc){
+        SQLiteDatabase database = SQLiteDatabase.openDatabase(PATH, null,
+                SQLiteDatabase.OPEN_READWRITE);
+
+        ContentValues values = new ContentValues();
+        values.put("md5", md5);
+        values.put("desc", desc);
+        database.insert("datable", null, values);
     }
 }

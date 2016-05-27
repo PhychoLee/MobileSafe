@@ -13,7 +13,6 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
@@ -22,13 +21,11 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -38,9 +35,10 @@ import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
 import com.llf.mobilesafe.R;
+import com.llf.mobilesafe.db.dao.AntivirusDao;
 import com.llf.mobilesafe.utils.StreamUtils;
-
 
 public class SplashActivity extends Activity {
 	
@@ -115,6 +113,8 @@ public class SplashActivity extends Activity {
         //复制数据库到本地文件夹
         copyDB("address.db");
         copyDB("antivirus.db");
+		updateVirus();
+
         
         SharedPreferences mpref = getSharedPreferences("config", MODE_PRIVATE);
         boolean auto_update = mpref.getBoolean("auto_update", true);
@@ -131,7 +131,32 @@ public class SplashActivity extends Activity {
         rl_splash.startAnimation(animation);
     }
 
-    /**
+	/**
+	 * 更新病毒数据库
+	 */
+	private void updateVirus() {
+		HttpUtils http = new HttpUtils();
+		http.send(HttpRequest.HttpMethod.GET, "http://192.168.14.185:8080/update.json", new RequestCallBack<String>() {
+			@Override
+			public void onSuccess(ResponseInfo<String> responseInfo) {
+				try {
+					JSONObject json = new JSONObject();
+					String md5 = json.getString("md5");
+					String desc = json.getString("desc");
+					AntivirusDao.updateVirus(md5, desc);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onFailure(HttpException e, String s) {
+
+			}
+		});
+	}
+
+	/**
      * 获取版本名
      * @return
      */
