@@ -63,4 +63,13 @@ public class AToolsActivity extends Activity {
 		}.start();
 
 	}
+
+	/**
+	 * 程序锁
+	 * @param view
+     */
+	public void appLock(View view){
+		Intent intent = new Intent(this, AppLockActivit.class);
+		startActivity(intent);
+	}
 }
