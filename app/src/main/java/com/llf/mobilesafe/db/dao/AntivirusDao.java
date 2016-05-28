@@ -19,6 +19,8 @@ public class AntivirusDao {
         if (cursor.moveToNext()){
             desc = cursor.getString(0);
         }
+        cursor.close();
+        database.close();
         return  desc;
     }
 
@@ -30,5 +32,6 @@ public class AntivirusDao {
         values.put("md5", md5);
         values.put("desc", desc);
         database.insert("datable", null, values);
+        database.close();
     }
 }

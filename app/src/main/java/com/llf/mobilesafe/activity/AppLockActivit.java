@@ -18,7 +18,7 @@ public class AppLockActivit extends FragmentActivity implements View.OnClickList
     private TextView tv_unlock;
     private UnlockFragment unlockFragment;
     private LockFragment lockFragment;
-    private FragmentTransaction mTransaction;
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +36,8 @@ public class AppLockActivit extends FragmentActivity implements View.OnClickList
         tv_lock.setOnClickListener(this);
         tv_unlock.setOnClickListener(this);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        mTransaction = fragmentManager.beginTransaction();
+        fragmentManager = getSupportFragmentManager();
+        FragmentTransaction mTransaction = fragmentManager.beginTransaction();
 
         unlockFragment = new UnlockFragment();
         lockFragment = new LockFragment();
@@ -46,11 +46,12 @@ public class AppLockActivit extends FragmentActivity implements View.OnClickList
          * 1 需要替换的界面的id
          * 2具体指某一个fragment的对象
          */
-        mTransaction.replace(R.id.fl_content, unlockFragment);
+        mTransaction.replace(R.id.fl_content, unlockFragment).commit();
     }
 
     @Override
     public void onClick(View v) {
+        FragmentTransaction mTransaction = fragmentManager.beginTransaction();
         switch (v.getId()){
             case R.id.tv_unlock:
                 tv_unlock.setBackgroundResource(R.drawable.tab_left_pressed);
@@ -65,5 +66,6 @@ public class AppLockActivit extends FragmentActivity implements View.OnClickList
                 mTransaction.replace(R.id.fl_content, lockFragment);
                 break;
         }
+        mTransaction.commit();
     }
 }
