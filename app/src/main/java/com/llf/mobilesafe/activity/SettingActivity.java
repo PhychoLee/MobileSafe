@@ -2,6 +2,7 @@ package com.llf.mobilesafe.activity;
 
 import com.llf.mobilesafe.R;
 import com.llf.mobilesafe.service.AddressService;
+import com.llf.mobilesafe.service.AppLockService;
 import com.llf.mobilesafe.service.BlackNumberService;
 import com.llf.mobilesafe.utils.SystemInfoUtils;
 import com.llf.mobilesafe.view.SettingClickView;
@@ -25,6 +26,7 @@ public class SettingActivity extends Activity {
 	private SettingClickView scvAddressStyle;
 	private SettingClickView scvAddressLocation;;
 	private SettingItemView siv_black_number;
+	private SettingItemView siv_app_lock;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class SettingActivity extends Activity {
 		initAddressStyle();
 		initAddressLocation();
 		initBlackNumber();
+		initAppLock();
 	}
 
 	/**
@@ -198,6 +201,37 @@ public class SettingActivity extends Activity {
 					siv_black_number.setChecked(true);
 					startService(new Intent(SettingActivity.this,
 							BlackNumberService.class));
+				}
+			}
+		});
+	}
+
+	/**
+	 * 软件锁拦截设置
+	 */
+	private void initAppLock() {
+		siv_app_lock = (SettingItemView) findViewById(R.id.siv_app_lock);
+
+		boolean isServiceRunning = SystemInfoUtils.isServiceRunning(this,
+				"com.llf.mobilesafe.service.AppLockService");
+		if (isServiceRunning) {
+			siv_app_lock.setChecked(true);
+		}else {
+			siv_app_lock.setChecked(false);
+		}
+
+		siv_app_lock.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (siv_app_lock.isChecked()) {
+					siv_app_lock.setChecked(false);
+					stopService(new Intent(SettingActivity.this,
+							AppLockService.class));
+				} else {
+					siv_app_lock.setChecked(true);
+					startService(new Intent(SettingActivity.this,
+							AppLockService.class));
 				}
 			}
 		});

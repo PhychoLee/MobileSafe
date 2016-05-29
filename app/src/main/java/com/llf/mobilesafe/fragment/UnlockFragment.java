@@ -96,8 +96,8 @@ public class UnlockFragment extends Fragment {
             final AppInfo appInfo = unlockList.get(position);
             holder.iv_icon.setImageDrawable(appInfo.getIcon());
             holder.tv_app_name.setText(appInfo.getAppName());
-            //点击给应用加锁
             final View finalConvertView = convertView;
+            //点击给应用加锁
             holder.iv_lock.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -106,14 +106,14 @@ public class UnlockFragment extends Fragment {
                             Animation.RELATIVE_TO_SELF, 1.0f,
                             Animation.RELATIVE_TO_SELF, 0,
                             Animation.RELATIVE_TO_SELF, 0);
-                    ta.setDuration(700);
+                    ta.setDuration(300);
                     finalConvertView.startAnimation(ta);
 
                     new Thread(){
                         @Override
                         public void run() {
                             //等待动画完成后再做更新操作
-                            SystemClock.sleep(700);
+                            SystemClock.sleep(300);
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
