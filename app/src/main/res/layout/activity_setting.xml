@@ -3,11 +3,13 @@
     xmlns:check="http://schemas.android.com/apk/res/com.llf.mobilesafe"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:scrollbars="vertical"
     android:orientation="vertical" >
 
     <TextView
         style="@style/TitleBar"
         android:text="设置中心" />
+
 
     <com.llf.mobilesafe.view.SettingItemView
         android:id="@+id/siv_update"

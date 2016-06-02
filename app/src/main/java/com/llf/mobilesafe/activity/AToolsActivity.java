@@ -9,7 +9,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 public class AToolsActivity extends Activity {
 
@@ -69,7 +68,7 @@ public class AToolsActivity extends Activity {
 	 * @param view
      */
 	public void appLock(View view){
-		Intent intent = new Intent(this, AppLockActivit.class);
+		Intent intent = new Intent(this, AppLockActivity.class);
 		startActivity(intent);
 	}
 }

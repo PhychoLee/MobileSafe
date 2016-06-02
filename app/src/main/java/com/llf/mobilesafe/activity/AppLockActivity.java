@@ -12,7 +12,7 @@ import com.llf.mobilesafe.R;
 import com.llf.mobilesafe.fragment.LockFragment;
 import com.llf.mobilesafe.fragment.UnlockFragment;
 
-public class AppLockActivit extends FragmentActivity implements View.OnClickListener{
+public class AppLockActivity extends FragmentActivity implements View.OnClickListener{
 
     private TextView tv_lock;
     private TextView tv_unlock;
