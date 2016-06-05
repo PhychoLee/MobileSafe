@@ -124,7 +124,8 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".activity.EnterPasswordActivity"></activity>
+        <activity android:name=".activity.EnterPasswordActivity" />
+        <activity android:name=".activity.CleanCacheActivity"></activity>
     </application>
 
 </manifest>
