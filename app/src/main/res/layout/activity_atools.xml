@@ -50,18 +50,4 @@
         android:textColor="@color/black"
         android:textSize="20sp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/btn_green_light_selector"
-        android:clickable="true"
-        android:drawableLeft="@android:drawable/ic_menu_camera"
-        android:drawablePadding="5dp"
-        android:gravity="center_vertical"
-        android:onClick="cleanCache"
-        android:padding="10dp"
-        android:text="清理缓存"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
-
 </LinearLayout>

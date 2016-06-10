@@ -71,13 +71,4 @@ public class AToolsActivity extends Activity {
 		Intent intent = new Intent(this, AppLockActivity.class);
 		startActivity(intent);
 	}
-
-	/**
-	 * 清理缓存
-	 * @param view
-	 */
-	public void cleanCache(View view){
-		Intent intent = new Intent(this, AppLockActivity.class);
-		startActivity(intent);
-	}
 }
